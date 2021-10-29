@@ -83,7 +83,11 @@ const $=(()=>{
         	s.addEventListener(e,c,t);
         },
         attribute:function(self,s,a){
-        	return s.getAttribute(a);
+        	let v = s.getAttribute(a);
+            if(v==undefined||v==null){
+            	return s[a];
+            }
+        	return v;
         },
         property:function(self,s,a){
         	return s[a];
@@ -118,7 +122,43 @@ const $=(()=>{
             	}
                 r(self.s);
             });
-        }
+        },
+        self:function(self,s){
+        	return s;
+        },
+        to:function(self,s,n){
+        	if(typeof n =="string"){
+            	n=document.querySelector(n);
+            }
+        	return applyMain(n,{a:false})
+        },
+        new:function(self,s,t,p,to){
+        	return applyMain(intr.makeE(t,p,to),{a:false});
+        },
+        append:function(self,s,c){
+        	if(typeof c=="string"){
+            	c=document.querySelector(c);
+            }
+        	s.appendChild(c);
+        },
+        before:function(self,s,c){
+        	if(typeof c=="string"){
+            	c=document.querySelector(c);
+            }
+        	c.parentNode.insertBefore(s,c);
+        },
+        after:function(self,s,c){
+        	if(typeof c=="string"){
+            	c=document.querySelector(c);
+            }
+            c.after(s);
+        },
+        br:function(self,s){
+        	return applyMain(intr.makeE("br"));
+        },
+        id:function(self,s,id){
+        	s.id=id;
+        },
 	};
     const methodAliases={
     	newline:["nl"],
@@ -185,4 +225,4 @@ const $=(()=>{
     }
     intr.applyP(main,mainAttr);
 	return main;
-})()
+})();
