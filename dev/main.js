@@ -2,6 +2,9 @@
 Non-Uglified Version for updating/editing
 */
 const $=(()=>{
+	const mainAttr={
+    	version:"v001.00",
+    };
 	class BaseError extends Error{constructor(Message){super(Message).name=this.constructor.name}}
     class QueryError extends BaseError{constructor(...a){super(...a)}}
     class QueryArgumentError extends BaseError{constructor(...a){super(...a)}}
@@ -10,9 +13,9 @@ const $=(()=>{
     	has:function(o,x){
         	return Object.prototype.hasOwnProperty.call(o,x);
         },
-        applyF:function(o,f){
+        applyF:function(o,f,...a){
         	if(f instanceof Function){
-            	return f(o);
+            	return f(o,...a);
             }
             return f;
         },
@@ -93,6 +96,29 @@ const $=(()=>{
         newline:function(self,s){
         	methods.write(self,s,"<br>");
         },
+        animate:function(self,s,...a){
+        	return s.animate(...a);
+        },
+        animations:function(self,s){
+        	return s.getAnimations();
+        },
+        loop:async function(self,s,a,f){
+        	for(let i=1;i<=a;i++){
+            	await f(s,i);
+            }
+        },
+        wait:async function(self,s,t=1){
+        	return await new Promise(r=>setTimeout(r,t*1000));
+        },
+        typewrite:async function(self,s,t="",i=0.1){
+        	return await new Promise(async r=>{
+        		for(let x=0;x<=t.length;x++){
+            		methods.text(self,s,t.substring(0,x));
+                	await methods.wait(self,s,i);
+            	}
+                r(self.s);
+            });
+        }
 	};
     const methodAliases={
     	newline:["nl"],
@@ -157,5 +183,6 @@ const $=(()=>{
         call.s = main;
         main[k] = call;
     }
+    intr.applyP(main,mainAttr);
 	return main;
 })()
