@@ -3,7 +3,7 @@ Non-Uglified Version for updating/editing
 */
 const $=(()=>{
 	const mainAttr={
-    	version:"v001.00",
+    	version:"v002.00",
     };
 	class BaseError extends Error{constructor(Message){super(Message).name=this.constructor.name}}
     class QueryError extends BaseError{constructor(...a){super(...a)}}
@@ -22,11 +22,16 @@ const $=(()=>{
         getE:function(t){
         	return document.getElementsByTagName(t.toUpperCase())[0];
         },
+        applyE:function(a,b){
+        	for(let k in b){
+            	let v=b[k];
+                if(typeof v=="object")this.applyE(a[k],v);
+                else a[k]=v;
+            }
+        },
         makeE:function(t,p={},to){
         	let e = document.createElement(t);
-            for(let k in p){
-            	e[k]=p[k];
-            }
+            this.applyE(e,p);
             if(to){
             	to.appendChild(e);
             }
@@ -103,6 +108,9 @@ const $=(()=>{
         animate:function(self,s,...a){
         	return s.animate(...a);
         },
+        setproperty:function(self,s,n,v){
+        	s[n]=v;
+        },
         animations:function(self,s){
         	return s.getAnimations();
         },
@@ -163,7 +171,9 @@ const $=(()=>{
     const methodAliases={
     	newline:["nl"],
         attribute:["attr"],
-        property:["prop"],
+        property:["prop","p"],
+        event:["on"],
+        setproperty:["setprop","sp"],
     };
     for(let k in methodAliases){
     	let v = methodAliases[k];
