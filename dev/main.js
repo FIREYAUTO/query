@@ -3,7 +3,7 @@ Non-Uglified Version for updating/editing
 */
 const $=(()=>{
 	const mainAttr={
-    	version:"v002.00",
+    	version:"v003.00",
     };
 	class BaseError extends Error{constructor(Message){super(Message).name=this.constructor.name}}
     class QueryError extends BaseError{constructor(...a){super(...a)}}
@@ -111,6 +111,9 @@ const $=(()=>{
         setproperty:function(self,s,n,v){
         	s[n]=v;
         },
+	remove:function(self,s){
+		s.remove();	
+	},
         animations:function(self,s){
         	return s.getAnimations();
         },
